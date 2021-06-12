@@ -9,7 +9,7 @@
                                 "https://*/*RapidBoard.jspa*"
                         ],
                         "js": [
-                                "jira_backlog_assistant.js"
+                                "main.js"
                         ]
                 }
         ]

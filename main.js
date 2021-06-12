@@ -9,7 +9,7 @@ let loadSortingButton = function () {
         backlogHeaders.forEach(function (backlogHeader) {
                 let sortButton = document.createElement("button");
                 sortButton.setAttribute("class", "jba-sorting-button");
-                sortButton.appendChild(document.createTextNode("Sort by Epic Prio."));
+                sortButton.appendChild(document.createTextNode("Sort by Epic"));
                 backlogHeader.appendChild(sortButton);
         });
 };

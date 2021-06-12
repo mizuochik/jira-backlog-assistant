@@ -1,5 +1,11 @@
 .jba-sorting-button {
         position: absolute;
-        top: 5ex;
-        right: 21px;
+        top: 6ex;
+        right: 0;
+        margin-right: 21px;
+        color: white;
+        background-color: royalblue;
+        border: 0;
+        padding: 0 0.6rem;
+        line-height: 1.4;
 }

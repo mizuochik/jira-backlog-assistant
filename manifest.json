@@ -9,7 +9,7 @@
                                 "https://*/*RapidBoard.jspa*"
                         ],
                         "js": [
-                                "main.js"
+                                "dist.js"
                         ],
                         "css": [
                                 "main.css"

@@ -20,4 +20,8 @@ export class Epic {
         get priority(): number {
                 return this.#priority;
         }
+
+        comparePriority(other: Epic): number {
+                return other.#priority - this.#priority;
+        }
 }

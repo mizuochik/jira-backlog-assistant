@@ -1,3 +1,5 @@
+import { EpicList } from './epic_list';
+
 export class BacklogItem {
         #key: string;
         #name: string;
@@ -19,5 +21,14 @@ export class BacklogItem {
 
         get epicKey(): string {
                 return this.#epicKey;
+        }
+
+        comparePriority(other: BacklogItem, epicList: EpicList): number {
+                if (!this.epicKey || !other.epicKey) {
+                        return 0;
+                }
+                const thisEpic = epicList.get(this.epicKey);
+                const otherEpic = epicList.get(other.epicKey);
+                return thisEpic.comparePriority(otherEpic);
         }
 }

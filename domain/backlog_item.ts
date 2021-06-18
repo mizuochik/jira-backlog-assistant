@@ -23,7 +23,7 @@ export class BacklogItem {
                 return this.#epicKey;
         }
 
-        comparePriority(other: BacklogItem, epicList: EpicList): number {
+        comparePriorityByEpic(other: BacklogItem, epicList: EpicList): number {
                 if (!this.epicKey || !other.epicKey) {
                         return 0;
                 }

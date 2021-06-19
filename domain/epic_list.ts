@@ -3,11 +3,8 @@ import { Epic } from "./epic";
 export class EpicList {
         #epicMap: Map<string, Epic>
 
-        constructor(epics: Array<Epic>) {
-                const epicMap = new Map<string, Epic>();
-                epics.forEach(epic => {
-                        epicMap.set(epic.key, epic);
-                });
+        constructor() {
+                this.#epicMap = new Map<string, Epic>();
         }
 
         get(key: string): Epic {

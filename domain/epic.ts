@@ -22,6 +22,6 @@ export class Epic {
         }
 
         comparePriority(other: Epic): number {
-                return other.#priority - this.#priority;
+                return this.#priority - other.#priority;
         }
 }

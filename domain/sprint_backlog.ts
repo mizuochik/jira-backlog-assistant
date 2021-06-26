@@ -2,9 +2,11 @@ import { BacklogItem } from './backlog_item';
 import { EpicList } from './epic_list';
 
 export class SprintBacklog {
+        boardId: string;
         backlogItems: Array<BacklogItem>;
 
-        constructor() {
+        constructor(boardId: string) {
+                this.boardId = boardId;
                 this.backlogItems = new Array<BacklogItem>();
         }
 

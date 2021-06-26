@@ -7,9 +7,9 @@ export class SortSprintBacklogItemsUseCase {
                 this.jiraBoardAccessor = jiraBoardAccessor;
         }
 
-        async Run(boardId: string, sprintName: string): Promise<void> {
+        async Run(boardId: string, sprintId: string): Promise<void> {
                 const el = await this.jiraBoardAccessor.getEpicList(boardId);
-                const sbl = await this.jiraBoardAccessor.getSprintBacklog(boardId, sprintName);
+                const sbl = await this.jiraBoardAccessor.getSprintBacklog(boardId, sprintId);
                 sbl.sortBacklogItemsByEpic(el)
                 await this.jiraBoardAccessor.applySprintBacklog(sbl);
         }

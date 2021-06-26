@@ -8,7 +8,7 @@ describe('SprintBacklog', () => {
                 let sprintBacklog: SprintBacklog;
 
                 beforeEach(() => {
-                        sprintBacklog = new SprintBacklog();
+                        sprintBacklog = new SprintBacklog('sprint-0', 'board-0');
                 });
 
                 test('sort items by epic priority', () => {

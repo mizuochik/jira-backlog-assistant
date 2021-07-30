@@ -3,6 +3,6 @@ import { EpicList } from '../domain/epic_list';
 
 export interface JiraBoardAccessor {
         getEpicList(boardId: string): Promise<EpicList>;
-        getSprintBacklog(boardId: string, sprintName: string): Promise<SprintBacklog>;
+        getSprintBacklog(boardId: string, sprintId: string): Promise<SprintBacklog>;
         applySprintBacklog(sprintBacklog: SprintBacklog): Promise<void>;
 }

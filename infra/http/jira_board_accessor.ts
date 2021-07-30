@@ -1,10 +1,12 @@
 import { EpicList } from '../../domain/epic_list';
 import { SprintBacklog } from '../../domain/sprint_backlog';
-import { JiraBoardAccessor as UCJiraBoardAccessor } from '../../use_case/jira_board_accessor';
+import { JiraBoardAccessor as IJiraBoardAccessor } from '../../use_case/jira_board_accessor';
 import { Epic } from '../../domain/epic';
 import { EpicResponse, EpicValue } from './epic_response';
+import { IssueValue, IssueResponse } from './issue_response';
+import { BacklogItem } from '../../domain/backlog_item';
 
-export class JiraBoardAccessor implements UCJiraBoardAccessor {
+export class JiraBoardAccessor implements IJiraBoardAccessor {
         async getEpicList(boardId: string): Promise<EpicList> {
                 async function getEpics(startAt: number, accum: EpicValue[]): Promise<EpicValue[]> {
                         return fetch(`/rest/agile/1.0/board/${boardId}/epic?startAt=${startAt}&done=false`)
@@ -26,8 +28,30 @@ export class JiraBoardAccessor implements UCJiraBoardAccessor {
                         });
         }
 
-        getSprintBacklog(sprintName: string): Promise<SprintBacklog> {
-                return null;
+        async getSprintBacklog(boardId: string, sprintId: string): Promise<SprintBacklog> {
+                async function getIssues(startAt: number, accum: IssueValue[]): Promise<IssueValue[]> {
+                        return fetch(`/rest/agile/1.0/board/${boardId}/sprint/${sprintId}/issue?jql=issuetype in (Task, ストーリー)&startAt=${startAt}`)
+                                .then(res => res.json())
+                                .then((res: IssueResponse) => {
+                                        const isLast = res.startAt + res.maxResults >= res.total;
+                                        if (isLast) {
+                                                return accum.concat(res.issues);
+                                        }
+                                        return getIssues(res.startAt + res.maxResults, accum.concat(res.issues));
+                                });
+                }
+                return getIssues(0, [])
+                        .then(ivs => {
+                                const sbl = new SprintBacklog(sprintId, boardId);
+                                ivs.forEach(iv => {
+                                        let epicKey = null;
+                                        if (iv.fields.epic) {
+                                                epicKey = iv.fields.epic.key
+                                        }
+                                        sbl.addBacklogItem(new BacklogItem(iv.key, iv.fields.summary, epicKey));
+                                });
+                                return sbl;
+                        });
         }
 
         applySprintBacklog(sprintBacklog: SprintBacklog): Promise<void> {

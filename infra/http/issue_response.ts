@@ -3,7 +3,7 @@ import { EpicValue } from "./epic_response";
 export interface IssueResponse {
     startAt: number;
     maxResults: number;
-    isLast: boolean;
+    total: number;
     issues: IssueValue[];
 }
 

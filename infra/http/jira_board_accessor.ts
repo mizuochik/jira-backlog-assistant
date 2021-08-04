@@ -54,7 +54,30 @@ export class JiraBoardAccessor implements IJiraBoardAccessor {
                         });
         }
 
-        applySprintBacklog(sprintBacklog: SprintBacklog): Promise<void> {
+        async applySprintBacklog(sprintBacklog: SprintBacklog): Promise<void> {
+                async function rankBefore(beforeKey: string, afterKey: string): Promise<void> {
+                        const res = await fetch(`/rest/agile/1.0/issue/rank`, {
+                                method: 'PUT',
+                                headers: {
+                                        'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                        issues: [
+                                                beforeKey
+                                        ],
+                                        rankBeforeIssue: afterKey
+                                })
+                        });
+                        if (200 <= res.status && res.status < 300) {
+                                return null;
+                        }
+                        const t = await res.text();
+                        throw t;
+                }
+                const backlogItems = sprintBacklog.backlogItems;
+                for (let i = backlogItems.length - 1; i > 0; i--) {
+                        await rankBefore(backlogItems[i - 1].key, backlogItems[i].key);
+                }
                 return null;
         }
 }

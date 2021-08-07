@@ -17,8 +17,25 @@ export class SprintBacklog {
         }
 
         sortBacklogItemsByEpic(epicList: EpicList) {
-                this.backlogItems.sort((a: BacklogItem, b: BacklogItem) => {
+                const itemsWithEpic: BacklogItem[] = [];
+                const sorted = new Array(this.backlogItems.length);
+                this.backlogItems.forEach((item, i) => {
+                        if (item.epicKey) {
+                                itemsWithEpic.push(item);
+                        } else {
+                                sorted[i] = item;
+                        }
+                });
+                itemsWithEpic.sort((a: BacklogItem, b: BacklogItem) => {
                         return a.comparePriorityByEpic(b, epicList);
                 });
+                itemsWithEpic.reverse();
+                for (let i = 0; i < this.backlogItems.length; i++) {
+                        if (sorted[i]) {
+                                continue;
+                        }
+                        sorted[i] = itemsWithEpic.pop();
+                }
+                this.backlogItems = sorted;
         }
 }

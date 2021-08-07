@@ -32,5 +32,26 @@ describe('SprintBacklog', () => {
                                 new BacklogItem('c', 'C', 'epic-C'),
                         ]);
                 });
+
+                test('ignore sorting items without epic', () => {
+                        const a = new BacklogItem('a', 'A', 'epic-A');
+                        const b = new BacklogItem('b', 'B', null);
+                        const c = new BacklogItem('c', 'C', 'epic-C');
+                        const epicList = new EpicList();
+                        epicList.add(new Epic('epic-A', 'A', 1));
+                        epicList.add(new Epic('epic-C', 'C', 3));
+
+                        sprintBacklog.addBacklogItem(c);
+                        sprintBacklog.addBacklogItem(b);
+                        sprintBacklog.addBacklogItem(a);
+
+                        sprintBacklog.sortBacklogItemsByEpic(epicList);
+
+                        expect(sprintBacklog.backlogItems).toEqual([
+                                new BacklogItem('a', 'A', 'epic-A'),
+                                new BacklogItem('b', 'B', null),
+                                new BacklogItem('c', 'C', 'epic-C'),
+                        ]);
+                });
         });
 });

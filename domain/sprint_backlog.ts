@@ -4,12 +4,12 @@ import { EpicList } from './epic_list';
 export class SprintBacklog {
         id: string;
         boardId: string;
-        backlogItems: Array<BacklogItem>;
+        backlogItems: BacklogItem[];
 
         constructor(id: string, boardId: string) {
                 this.id = id;
                 this.boardId = boardId;
-                this.backlogItems = new Array<BacklogItem>();
+                this.backlogItems = [];
         }
 
         addBacklogItem(backlogItem: BacklogItem) {

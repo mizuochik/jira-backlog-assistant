@@ -16,10 +16,19 @@ export class JiraBoard {
 
     async sortSprintBacklogItems(boardId: string, sprintId: string) {
         await this.sortSprintBacklogItemsUseCase.run(boardId, sprintId);
-        this.reloadItemElements(boardId, sprintId);
+        await this.reloadItemElements(boardId, sprintId);
     }
 
-    reloadItemElements(boardId: string, sprintId: string) {
-        // TBD
+    async reloadItemElements(boardId: string, sprintId: string) {
+        const sbl = await this.jiraBoardAccessor.getSprintBacklog(boardId, sprintId);
+        const issues = document.querySelector(`[data-sprint-id='${sprintId}'] .ghx-issues`);
+        const childs = Array.from(issues.childNodes);
+        sbl.backlogItems.forEach((item, i) => {
+            // offset the sorted issue elements
+            childs[i + 1] = issues.querySelector(`[data-issue-key='${item.key}']`);
+        });
+        childs.forEach(n => {
+            issues.appendChild(n);
+        });
     }
 }

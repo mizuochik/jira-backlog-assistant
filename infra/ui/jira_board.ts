@@ -10,7 +10,7 @@ export class JiraBoard {
         this.sortSprintBacklogItemsUseCase = sortSprintBacklogItemsUseCase;
     }
 
-    async placeSortButtons(): Promise<void> {
+    async initialize(): Promise<void> {
         // TBD
     }
 

@@ -10,8 +10,17 @@ export class JiraBoard {
         this.sortSprintBacklogItemsUseCase = sortSprintBacklogItemsUseCase;
     }
 
-    async initialize(): Promise<void> {
-        // TBD
+    initialize() {
+        const boardId = new URLSearchParams(document.location.search).get('rapidView');
+        const sblHeaders = document.querySelectorAll('.ghx-backlog-header');
+        sblHeaders.forEach(header => {
+            const sprintId = header.getAttribute('data-sprint-id');
+            const btn = document.createElement('button');
+            btn.setAttribute('class', 'jba-sort-button');
+            btn.addEventListener('click', () => this.sortSprintBacklogItems(boardId, sprintId));
+            btn.appendChild(document.createTextNode('Sort by Epic'));
+            header.appendChild(btn);
+        });
     }
 
     async sortSprintBacklogItems(boardId: string, sprintId: string) {

@@ -1,3 +1,4 @@
+import { SprintBacklog } from "../../domain/sprint_backlog";
 import { SortSprintBacklogItemsUseCase } from "../../use_case/sort_sprint_backlog_items_use_case";
 import { JiraBoardAccessor } from "../http/jira_board_accessor";
 
@@ -43,16 +44,15 @@ export class JiraBoard {
     async sortSprintBacklogItems(boardId: string, sprintId: string) {
         const issues = this.issuesElement(sprintId);
         issues.setAttribute('style', 'opacity: 0.5');
-        await this.sortSprintBacklogItemsUseCase.run(boardId, sprintId);
-        await this.reloadItemElements(boardId, sprintId);
+        const sbl = await this.sortSprintBacklogItemsUseCase.run(boardId, sprintId);
+        await this.reloadItemElements(sbl);
         issues.removeAttribute('style');
     }
 
-    async reloadItemElements(boardId: string, sprintId: string) {
-        const sbl = await this.jiraBoardAccessor.getSprintBacklog(boardId, sprintId);
-        const issues = this.issuesElement(sprintId);
+    async reloadItemElements(sprintBacklog: SprintBacklog) {
+        const issues = this.issuesElement(sprintBacklog.id);
         const childs = Array.from(issues.childNodes);
-        sbl.backlogItems.forEach((item, i) => {
+        sprintBacklog.backlogItems.forEach((item, i) => {
             // offset the sorted issue elements
             childs[i + 1] = issues.querySelector(`[data-issue-key='${item.key}']`);
         });

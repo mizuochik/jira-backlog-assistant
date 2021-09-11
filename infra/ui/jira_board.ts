@@ -4,23 +4,40 @@ import { JiraBoardAccessor } from "../http/jira_board_accessor";
 export class JiraBoard {
     jiraBoardAccessor: JiraBoardAccessor;
     sortSprintBacklogItemsUseCase: SortSprintBacklogItemsUseCase;
+    sortButtons: Map<string, Element>;
 
     constructor(jiraBoardAccessor: JiraBoardAccessor, sortSprintBacklogItemsUseCase: SortSprintBacklogItemsUseCase) {
         this.jiraBoardAccessor = jiraBoardAccessor;
         this.sortSprintBacklogItemsUseCase = sortSprintBacklogItemsUseCase;
+        this.sortButtons = new Map();
     }
 
     initialize() {
         const boardId = new URLSearchParams(document.location.search).get('rapidView');
-        const sblHeaders = document.querySelectorAll('.ghx-backlog-header');
-        sblHeaders.forEach(header => {
-            const sprintId = header.getAttribute('data-sprint-id');
-            const btn = document.createElement('button');
-            btn.setAttribute('class', 'jba-sort-button');
-            btn.addEventListener('click', () => this.sortSprintBacklogItems(boardId, sprintId));
-            btn.appendChild(document.createTextNode('Sort by Epic'));
-            header.appendChild(btn);
-        });
+        const loadButtons = () => {
+            const sblHeaders = document.querySelectorAll('.ghx-backlog-header');
+            sblHeaders.forEach(h => {
+                const sprintId = h.getAttribute('data-sprint-id');
+                let b = this.sortButtons.get(sprintId);
+                if (!b) {
+                    b = this.newSortButton(boardId, sprintId);
+                    this.sortButtons.set(sprintId, b);
+                }
+                if (h.lastChild != b) {
+                    h.appendChild(b);
+                }
+            });
+            setTimeout(loadButtons, 1000);
+        };
+        loadButtons();
+    }
+
+    newSortButton(boardId: string, sprintId: string): Element {
+        const b = document.createElement('button');
+        b.setAttribute('class', 'jba-sort-button');
+        b.addEventListener('click', () => this.sortSprintBacklogItems(boardId, sprintId));
+        b.appendChild(document.createTextNode('Sort by Epic'));
+        return b;
     }
 
     async sortSprintBacklogItems(boardId: string, sprintId: string) {

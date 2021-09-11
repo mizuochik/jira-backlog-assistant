@@ -22,4 +22,4 @@ This extension is still in development. General users shouldn't install this.
 
 ## License
 
-See ./LICENSE .
+See [LICENSE](./LICENSE).

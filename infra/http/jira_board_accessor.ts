@@ -67,8 +67,13 @@ export class JiraBoardAccessor implements IJiraBoardAccessor {
                         throw t;
                 }
                 const backlogItems = sprintBacklog.backlogItems;
-                for (let i = backlogItems.length - 1; i > 0; i--) {
-                        await rankBefore(backlogItems[i - 1].key, backlogItems[i].key);
+                const callGroupSize = 10;
+                for (let i = backlogItems.length - 1; i > 0; i -= callGroupSize) {
+                        const callGroup: Promise<void>[] = [];
+                        for (let j = i; j > 0 && j > i - callGroupSize; j--) {
+                                callGroup.push(rankBefore(backlogItems[j - 1].key, backlogItems[j].key));
+                        }
+                        await Promise.all(callGroup);
                 }
                 return null;
         }

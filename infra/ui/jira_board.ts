@@ -41,13 +41,16 @@ export class JiraBoard {
     }
 
     async sortSprintBacklogItems(boardId: string, sprintId: string) {
+        const issues = this.issuesElement(sprintId);
+        issues.setAttribute('style', 'opacity: 0.5');
         await this.sortSprintBacklogItemsUseCase.run(boardId, sprintId);
         await this.reloadItemElements(boardId, sprintId);
+        issues.removeAttribute('style');
     }
 
     async reloadItemElements(boardId: string, sprintId: string) {
         const sbl = await this.jiraBoardAccessor.getSprintBacklog(boardId, sprintId);
-        const issues = document.querySelector(`[data-sprint-id='${sprintId}'] .ghx-issues`);
+        const issues = this.issuesElement(sprintId);
         const childs = Array.from(issues.childNodes);
         sbl.backlogItems.forEach((item, i) => {
             // offset the sorted issue elements
@@ -56,5 +59,9 @@ export class JiraBoard {
         childs.forEach(n => {
             issues.appendChild(n);
         });
+    }
+
+    issuesElement(sprintId: string): Element {
+        return document.querySelector(`[data-sprint-id='${sprintId}'] .ghx-issues`);
     }
 }

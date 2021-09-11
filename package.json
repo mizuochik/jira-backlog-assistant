@@ -12,6 +12,7 @@
     "webpack": "^5.39.0",
     "webpack-cli": "^4.7.2"
   },
+  "license": "MIT",
   "jest": {
     "moduleFileExtensions": [
       "js",

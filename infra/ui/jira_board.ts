@@ -16,7 +16,7 @@ export class JiraBoard {
     initialize() {
         const boardId = new URLSearchParams(document.location.search).get('rapidView');
         const loadButtons = () => {
-            const sblHeaders = document.querySelectorAll('.ghx-backlog-header');
+            const sblHeaders = document.querySelectorAll('.ghx-backlog-header[data-sprint-id]');
             sblHeaders.forEach(h => {
                 const sprintId = h.getAttribute('data-sprint-id');
                 let b = this.sortButtons.get(sprintId);

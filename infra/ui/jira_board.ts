@@ -52,9 +52,13 @@ export class JiraBoard {
     async reloadItemElements(sprintBacklog: SprintBacklog) {
         const issues = this.issuesElement(sprintBacklog.id);
         const childs = Array.from(issues.childNodes);
-        sprintBacklog.backlogItems.forEach((item, i) => {
-            // offset the sorted issue elements
-            childs[i + 1] = issues.querySelector(`[data-issue-key='${item.key}']`);
+        let i = 1; // offset the sorted issue elements
+        sprintBacklog.backlogItems.forEach(item => {
+            const c = issues.querySelector(`[data-issue-key='${item.key}']`);
+            if (c) {
+                childs[i] = c;
+                i++;
+            }
         });
         childs.forEach(n => {
             issues.appendChild(n);
